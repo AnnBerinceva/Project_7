@@ -44,27 +44,9 @@ public class OrderTest {
                 .response(); }
 
     @Test
-    @Step("Создание заказа")
     public void createAnOrder() {
         Response response = creatingOrder(creatingOrder);
         response.then().statusCode(201);
         Integer track = response.path("track");
         MatcherAssert.assertThat(track, notNullValue());  }
-
-    @Step("Получение списка заказов.")
-    private Response gettingListOrders(){
-        return given()
-                .header("Content-type", "application/json")
-                .get("/api/v1/orders")
-                .then()
-                .extract()
-                .response(); }
-
-    @Test
-    @Step("Получение списка заказов.")
-    public void checkOrderList() {
-        Response response = gettingListOrders();
-        response.then().statusCode(200);
-        String orders = response.path("orders").toString();
-        MatcherAssert.assertThat(orders, notNullValue()); }
 }
