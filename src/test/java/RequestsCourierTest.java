@@ -20,7 +20,7 @@ public class RequestsCourierTest {
     @Test
     @DisplayName("курьера можно создать")
     public void creatingCourier() {
-        courier = stepCourier.newCourier("00_15_Test15_ninja", "1234", "saske");
+        courier = stepCourier.newCourier("001Test15_ninja", "1234", "saske");
         Response response = stepCourier.requestNewCourier(courier);
         stepCourier.requestSuccessfully(response); }
 

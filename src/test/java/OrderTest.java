@@ -14,10 +14,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
 @RunWith(Parameterized.class)
 public class OrderTest {
-    private final CreatingOrder creatingOrder;
-
-    public OrderTest(CreatingOrder creatingOrder) { this.creatingOrder = creatingOrder; }
-
     @Parameterized.Parameters
     public static Collection<Object[]> list(){
         return Arrays.asList(new Object[][]{
@@ -28,24 +24,17 @@ public class OrderTest {
         });
     }
     private static final String BASE_URL = "http://qa-scooter.praktikum-services.ru";
+    private final CreatingOrder creatingOrder;
+    private OrderSteps orderSteps;
 
+    public OrderTest(CreatingOrder creatingOrder) { this.creatingOrder = creatingOrder; }
     @Before
     public void setUp() {
         RestAssured.baseURI = BASE_URL;
-    }
-    @Step("Создание заказа")
-    private Response creatingOrder(CreatingOrder creatingOrder) {
-        return given()
-                .header("Content-type", "application/json")
-                .body(creatingOrder)
-                .post("/api/v1/orders")
-                .then()
-                .extract()
-                .response(); }
-
+        orderSteps = new OrderSteps();   }
     @Test
     public void createAnOrder() {
-        Response response = creatingOrder(creatingOrder);
+        Response response = orderSteps.creatingOrder(creatingOrder);
         response.then().statusCode(201);
         Integer track = response.path("track");
         MatcherAssert.assertThat(track, notNullValue());  }

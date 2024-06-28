@@ -1,33 +1,24 @@
-import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class GettingListOrders {
     private static final String BASE_URL = "http://qa-scooter.praktikum-services.ru";
-    private StepCourier stepCourier;
+    private OrderSteps orderSteps;
     @Before
     public void setUp() {
         RestAssured.baseURI = BASE_URL;
-        stepCourier = new StepCourier();
+        orderSteps = new OrderSteps();
     }
-    @Step("Получение списка заказов.")
-    private Response gettingListOrders(){
-        return given()
-                .header("Content-type", "application/json")
-                .get("/api/v1/orders")
-                .then()
-                .extract()
-                .response(); }
     @Test
-    @Step("Получение списка заказов.")
+    @DisplayName("Получение списка заказов")
     public void checkOrderList() {
-        Response response = gettingListOrders();
+        Response response = orderSteps.gettingListOrders();
         response.then().statusCode(200);
         String orders = response.path("orders").toString();
         MatcherAssert.assertThat(orders, notNullValue()); }
